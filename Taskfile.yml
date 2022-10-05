@@ -1,0 +1,38 @@
+version: "3"
+    
+tasks:
+    setup:
+        desc: Docker compose up
+        cmds:
+        - docker compose up -d
+
+    install:
+        desc: Install
+        cmds:
+        - yarn install
+
+    start:
+        desc: Start
+        cmds:
+        - yarn start
+
+    migrate:
+        desc: input test data to DB
+        cmds:
+        - migrate -path ./db/migrations -database 'mysql://root:password@tcp(127.0.0.1)/order_service?parseTime=true' up
+        - mysql -h 127.0.0.1 -u root -ppassword -e "CREATE DATABASE catalogue_service"
+        - migrate -path ./db/catalogue -database 'mysql://root:password@tcp(127.0.0.1)/catalogue_service?parseTime=true' up
+        - mysql -h 127.0.0.1 -u root -ppassword -e "CREATE DATABASE seller_service"
+        - migrate -path ./db/seller -database 'mysql://root:password@tcp(127.0.0.1)/seller_service?parseTime=true' up
+        - mysql -h 127.0.0.1 -u root -ppassword < db/test_data.sql
+
+    test:
+        desc: Execute tests
+        cmds:
+        - gotestsum --format short-verbose
+
+    teardown:
+        desc: Docker compose down
+        cmds:
+        - docker compose down
+        - docker volume prune -f
