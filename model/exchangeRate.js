@@ -16,7 +16,7 @@ const exchangeRateSchema = new Schema({
     },
 
     rate: {
-      type: String,
+      type: Number,
       required: true
     }
 
