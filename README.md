@@ -15,15 +15,32 @@ query {
 }
 
 mutation {
-  createCurrencyPair(currencyPair: {base: "USE", quote: "SGD"}) {
+  createCurrencyPair(currencyPair: {base: "USD", quote: "SGD"}) {
     base
   	quote
   }
 }
 
 query {
-  currencyPair {
+  currencyPairs {
     base
     quote
+  }
+}
+
+mutation {
+  createExchangeRate(exchangeRate: {fy: "2022", qtr: "Q3", rate:"1.43"}) {
+    fy
+    qtr
+    rate
+  }
+}
+
+query {
+  exchangeRates {
+    fy
+    qtr
+    rate
+    createdAt
   }
 }

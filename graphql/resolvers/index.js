@@ -1,5 +1,6 @@
 const Article = require('../../model/article')
 const CurrencyPair = require('../../model/currencyPair')
+const ExchangeRate = require('../../model/exchangeRate')
 
 module.exports = {
 
@@ -10,7 +11,8 @@ module.exports = {
                 return { 
                     ...article._doc, 
                     _id: article.id, 
-                createdAt: new Date(article._doc.createdAt).toISOString() }
+                    createdAt: new Date(article._doc.createdAt).toISOString() 
+                }
             })
         }
         catch (error) {
@@ -33,7 +35,7 @@ module.exports = {
         }
     },
 
-    currencyPair: async () => {
+    currencyPairs: async () => {
         try {
             const currencyPairsFetched = await CurrencyPair.find()
             return currencyPairsFetched.map(currencyPair => {
@@ -50,13 +52,45 @@ module.exports = {
 
     createCurrencyPair: async args => {
         try {
-        const { base, quote } = args.currencyPair
-        const currencyPair = new CurrencyPair({
-            base,
-            quote
-        })
-        const newCurrencyPair = await currencyPair.save()
-        return { ...newCurrencyPair._doc, _id: newCurrencyPair.id }
+            const { base, quote } = args.currencyPair
+            const currencyPair = new CurrencyPair({
+                base,
+                quote
+            })
+            const newCurrencyPair = await currencyPair.save()
+            return { ...newCurrencyPair._doc, _id: newCurrencyPair.id }
+        }
+        catch (error) {
+            throw error
+        }
+    },
+
+    exchangeRates: async () => {
+        try {
+            const exchangeRatesFetched = await ExchangeRate.find()
+            return exchangeRatesFetched.map(exchangeRate => {
+                return { 
+                    ...exchangeRate._doc, 
+                    _id: exchangeRate.id,
+                    createdAt: new Date(exchangeRate._doc.createdAt).toISOString() 
+                }
+            })
+        }
+        catch (error) {
+            throw error
+        }
+    },
+
+    createExchangeRate: async args => {
+        try {
+            const { fy, qtr, rate } = args.exchangeRate
+            const exchangeRate = new ExchangeRate({
+                fy,
+                qtr,
+                rate
+            })
+            const newExchangeRate = await exchangeRate.save()
+            return { ...newExchangeRate._doc, _id: newExchangeRate.id }
         }
         catch (error) {
             throw error

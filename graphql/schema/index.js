@@ -25,15 +25,31 @@ module.exports = buildSchema(`
     base: String!
     quote: String!
   }
+
+  type ExchangeRate {
+    _id: ID!
+    fy: String!
+    qtr: String!
+    rate: String!
+    createdAt: String!
+  }
+  
+  input ExchangeRateInput {
+    fy: String!
+    qtr: String!
+    rate: String!
+  }
   
   type Query {
     articles:[Article!]
-    currencyPair:[CurrencyPair!]
+    currencyPairs:[CurrencyPair!]
+    exchangeRates:[ExchangeRate!]
   }
 
   type Mutation {
     createArticle(article:ArticleInput): Article
     createCurrencyPair(currencyPair:CurrencyPairInput): CurrencyPair
+    createExchangeRate(exchangeRate:ExchangeRateInput): ExchangeRate
   }
 
   schema {
